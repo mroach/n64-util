@@ -1,0 +1,41 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+path = ARGV[0]
+
+if path.nil?
+  warn("Usage: #{__FILE__} PATH")
+  exit 1
+end
+
+require_relative "lib/n64"
+
+BYTE_SWAP_SIZE = { n64: 4, v64: 2 }
+
+Dir[File.join(path, "*.{n64,v64,z64}")].map do |file_path|
+  info = N64::RomInfo.new(file_path)
+  file_format = info.file_format
+
+  actual_ext = File.extname(file_path)
+  proper_ext = ".#{file_format}"
+
+  next if actual_ext == proper_ext
+
+  file_name = File.basename(file_path)
+  bare_name = File.basename(file_name, ".*")
+
+  proper_name = "#{bare_name}#{proper_ext}"
+  proper_path = File.join(File.dirname(file_path), proper_name)
+  native_path = File.join(File.dirname(file_path), "#{bare_name}.z64")
+
+  puts <<~EOF
+    #{file_name} should have the extension #{proper_ext}
+
+      Option 1: Rename the file:
+        $ mv "#{file_path}" "#{proper_path}"
+
+      Option 2: Convert the file to the proper format:
+        $ objcopy -I binary -O binary --reverse-bytes=#{BYTE_SWAP_SIZE.fetch(file_format)} "#{file_path}" "#{native_path}"
+
+  EOF
+end

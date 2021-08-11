@@ -1,0 +1,44 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+path = ARGV[0]
+
+if path.nil?
+  warn("Usage: #{__FILE__} PATH")
+  exit 1
+end
+
+require_relative "lib/n64"
+
+if File.file?(path)
+  puts N64::RomInfo.new(path).to_s
+  exit 0
+end
+
+files = Dir[File.join(path, "*.{n64,v64,z64}")].map do |file_path|
+  file_name = File.basename(file_path)
+
+  info = N64::RomInfo.new(file_path)
+
+  [file_name, info.to_h]
+end.sort_by { |x| x[0] }
+
+c1w = files.map { |fn, _| fn.length }.max + 2
+
+header = format("%-#{c1w}s %6s %-20s %s %10s %-4s %-10s %8s",
+  "File Name", "Format", "ROM Title", "Ver", "Region", "CIC", "CRC 1", "Size")
+
+puts header
+puts "-" * header.length
+
+files.each do |file_name, info|
+  puts format("%-#{c1w}s %6s %-20s 1.%s %10s %s 0x%s %8s",
+    file_name,
+    info[:file_format],
+    info[:title],
+    info[:version],
+    info[:region],
+    info[:cic],
+    info[:crc1],
+    N64::Util.format_file_size(info[:file_size], precision: 0))
+end
