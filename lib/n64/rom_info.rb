@@ -157,6 +157,10 @@ module N64
       read_byte(0x3F)
     end
 
+    def file_name
+      File.basename(path)
+    end
+
     def to_h
       hex_prefix = ""
 
@@ -166,6 +170,8 @@ module N64
         version: version,
         file_format: file_format,
         file_size: file_size,
+        file_path: path,
+        file_name: file_name,
         region: region,
         media_format: media_format,
         cic: cic,

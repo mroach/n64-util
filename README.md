@@ -81,12 +81,13 @@ $ ./n64_rom_info --output=json ~/Downloads/n64/Tsumi\ to\ Batsu\ -\ Hoshi\ no\ K
   "version": 0,
   "file_format": "z64",
   "file_size": 33554432,
+  "file_path": "/home/mroach/Downloads/n64/Tsumi to Batsu - Hoshi no Keishousha (Japan).z64",
+  "file_name": "Tsumi to Batsu - Hoshi no Keishousha (Japan).z64",
   "region": "jp",
   "media_format": "N",
   "cic": 6102,
   "crc1": "B6BC0FB0",
-  "crc2": "E3812198",
-  "file_name": "Tsumi to Batsu - Hoshi no Keishousha (Japan).z64"
+  "crc2": "E3812198"
 }
 ```
 
