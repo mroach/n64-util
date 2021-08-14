@@ -14,7 +14,8 @@ BYTE_SWAP_SIZE = { n64: 4, v64: 2 }
 
 ANSI_STYLES = { reset: "\e[0m", ul: "\e[4m" }
 
-Dir[File.join(path, "*.{n64,v64,z64}")].map do |file_path|
+rom_pattern = format("*.{%s}", N64::ROM_EXTENSIONS.join(","))
+Dir[File.join(path, rom_pattern)].map do |file_path|
   info = N64::RomInfo.new(file_path)
   file_format = info.file_format
 
@@ -23,12 +24,13 @@ Dir[File.join(path, "*.{n64,v64,z64}")].map do |file_path|
   actual_ext = File.extname(file_path)
   proper_ext = ".#{file_format}"
 
-  file_name = File.basename(file_path)
+  file_name = info.file_name
   bare_name = File.basename(file_name, ".*")
 
+  dir         = File.dirname(file_path)
   proper_name = "#{bare_name}#{proper_ext}"
-  proper_path = File.join(File.dirname(file_path), proper_name)
-  native_path = File.join(File.dirname(file_path), "#{bare_name}.z64")
+  proper_path = File.join(dir, proper_name)
+  native_path = File.join(dir, "#{bare_name}.z64")
 
   puts "#{ANSI_STYLES[:ul]}#{file_name}#{ANSI_STYLES[:reset]} is in #{file_format} format."
 

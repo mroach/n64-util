@@ -55,8 +55,9 @@ if File.file?(path)
   exit 0
 end
 
-files = Dir[File.join(path, "*.{#{N64::ROM_EXTENSIONS.join(",")}}")].map do |file_path|
-  N64::RomInfo.new(file_path).to_h.merge(file_name: File.basename(file_path))
+rom_pattern = format("*.{%s}", N64::ROM_EXTENSIONS.join(","))
+files = Dir[File.join(path, rom_pattern)].map do |file_path|
+  N64::RomInfo.new(file_path).to_h
 end.sort_by { |x| x[:file_name] }
 
 if options[:format] == :json
