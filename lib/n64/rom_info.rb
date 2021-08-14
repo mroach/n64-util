@@ -184,16 +184,19 @@ module N64
       hex_prefix = "0x"
 
       <<~EOF
-        Title:        #{title}
-        File format:  #{FILE_FORMATS[file_format]}
-        File size:    #{Util.format_file_size(file_size)}
-        ROM ID:       #{rom_id}
-        Media:        #{MEDIA_FORMATS[media_format] || media_format}
-        Version:      #{version}
-        Region:       #{REGION_NAMES[region] || region}
-        CIC:          CIC-NUS-#{cic}
-        CRC 1:        #{Util.format_hex(crc1, prefix: hex_prefix)}
-        CRC 2:        #{Util.format_hex(crc2, prefix: hex_prefix)}
+        File:
+          Path:    #{path}
+          Size:    #{Util.format_file_size(file_size)}
+          Format:  #{FILE_FORMATS[file_format]}
+
+        Title:     #{title}
+        ROM ID:    #{rom_id}
+        Media:     #{MEDIA_FORMATS[media_format] || media_format}
+        Version:   #{version}
+        Region:    #{REGION_NAMES[region] || region}
+        CIC:       CIC-NUS-#{cic}
+        CRC 1:     #{Util.format_hex(crc1, prefix: hex_prefix)}
+        CRC 2:     #{Util.format_hex(crc2, prefix: hex_prefix)}
       EOF
     end
 

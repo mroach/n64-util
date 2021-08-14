@@ -57,18 +57,21 @@ Wave Race 64 (USA) (Rev A).z64                                 z64 WAVE RACE 64 
 
 Or for a single file:
 
-```shell
+```
 $ ./n64_rom_info ~/Downloads/n64/Tsumi\ to\ Batsu\ -\ Hoshi\ no\ Keishousha\ \(Japan\).z64
-Title:        TSUMI TO BATSU
-File format:  Z64 (Big-endian, Native)
-File size:    32.00 MiB
-ROM ID:       GU
-Media:        Cartridge
-Version:      0
-Region:       Japan
-CIC:          CIC-NUS-6102
-CRC 1:        0xB6BC0FB0
-CRC 2:        0xE3812198
+File:
+  Path:    /home/mroach/Downloads/n64/Tsumi to Batsu - Hoshi no Keishousha (Japan).z64
+  Size:    32.00 MiB
+  Format:  Z64 (Big-endian, Native)
+
+Title:     TSUMI TO BATSU
+ROM ID:    GU
+Media:     Cartridge
+Version:   0
+Region:    Japan
+CIC:       CIC-NUS-6102
+CRC 1:     0xB6BC0FB0
+CRC 2:     0xE3812198
 ```
 
 It's also possible to output the data in JSON, making it easier to consumer from another application:
