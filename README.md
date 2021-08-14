@@ -18,7 +18,7 @@ Given a directory or file path, shows all info by reading the ROM headers.
 
 Example usage and output:
 
-```shell
+```
 $ ./n64_rom_info ~/roms/n64/
 File Name                                                   Format ROM Title            Ver     Region CIC  CRC 1          Size
 -------------------------------------------------------------------------------------------------------------------------------
@@ -76,7 +76,7 @@ CRC 2:     0xE3812198
 
 It's also possible to output the data in JSON, making it easier to consumer from another application:
 
-```shell
+```
 $ ./n64_rom_info --output=json ~/Downloads/n64/Tsumi\ to\ Batsu\ -\ Hoshi\ no\ Keishousha\ \(Japan\).z64
 {
   "title": "TSUMI TO BATSU",
@@ -110,7 +110,7 @@ The `n64_rom_formats` tool scans a directory for all ROMs that are not in the na
 * If the file extension is wrong, it will suggest how to rename it.
 * For all ROMs, it will suggest converting it to the native format.
 
-```shell
+```
 $ ./n64_rom_formats ~/Downloads/n64
 Super Smash Bros. (USA).n64 is in v64 format.
 Its file extension is wrong. To fix:
@@ -118,4 +118,58 @@ Its file extension is wrong. To fix:
 
 To convert the file to the native file format:
   $ objcopy -I binary -O binary --reverse-bytes=2 "/home/mroach/Downloads/n64/Super Smash Bros. (USA).n64" "/home/mroach/Downloads/n64/Super Smash Bros. (USA).z64"
+```
+
+## n64_patch_info
+
+This was designed around the conventions of Everdrive 64.
+
+* The directory `/ED64/patcher` contains patches with the game's CRC1 as the file name
+* Patches are `.ips` or `.aps`
+
+Given a path to the patches and ROMs, it finds:
+* Patches paired with ROMs.
+* Patches with no corresponding game ROM.
+* ROMs without patches.
+
+```
+./n64_patch_info /media/mroach/E64/ED64/patcher /media/mroach/E64/ROMS
+Patches without a ROM: ["ABA51D09", "BDA8F143", "E402430D"]
+
+Patches in use:
+07861842 Excitebike 64 (USA).z64
+0EC158F5 Mega Man 64 (USA).z64
+1FBAF161 1080 Snowboarding (Japan, USA) (En,Ja).z64
+3E5055B6 Mario Kart 64 (USA).z64
+492F4B61 Wave Race 64 (USA) (Rev A).z64
+635A2BFF Super Mario 64 (USA).z64
+65EEE53A Paper Mario (USA).z64
+664BA3D4 Mario Golf (USA).z64
+66A24BEC Star Wars - Rogue Squadron (USA) (Rev A).z64
+B30ED978 F-Zero X (USA).z64
+BA780BA0 Star Fox 64 (USA) (Rev A).z64
+DCBC50D1 007 - GoldenEye (USA).z64
+F568D51E Bomberman 64 (USA).z64
+
+Unpatched ROMs:
+CD7559AC.ips wanted for Banjo-Kazooie (USA) (Rev A).z64
+C2E9AA9A.ips wanted for Banjo-Tooie (USA).z64
+7C647E65.ips wanted for Blast Corps (USA) (Rev A).z64
+30C7AC50.ips wanted for Conker's Bad Fur Day (USA).z64
+B3402554.ips wanted for Cruis'n USA (USA) (Rev B).z64
+DFE61153.ips wanted for Cruis'n World (USA).z64
+53D440E7.ips wanted for Diddy Kong Racing (USA) (En,Fr).z64
+EC58EABF.ips wanted for Donkey Kong 64 (USA).z64
+8A6009B6.ips wanted for Jet Force Gemini (USA).z64
+F908CA4C.ips wanted for Killer Instinct Gold (USA) (Rev B).z64
+096A40EA.ips wanted for LEGO Racers (USA) (En,Fr,De,Es,It,Nl,Sv,No,Da,Fi).z64
+5354631C.ips wanted for Legend of Zelda, The - Majora's Mask (USA).z64
+693BA2AE.ips wanted for Legend of Zelda, The - Ocarina of Time (U) (V1.2) [!].z64
+9EA95858.ips wanted for Mario Party 2 (USA).z64
+5001CF4F.ips wanted for Mario Tennis (USA).z64
+147E0EDB.ips wanted for Neon Genesis Evangelion (J) [!].z64
+41F2B98F.ips wanted for Perfect Dark (USA) (Rev A).z64
+C851961C.ips wanted for Pilotwings 64 (USA).z64
+916B8B5B.ips wanted for Super Smash Bros. (USA).z64
+B6BC0FB0.ips wanted for Tsumi to Batsu - Hoshi no Keishousha (Japan).z64
 ```

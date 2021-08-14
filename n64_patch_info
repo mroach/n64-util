@@ -1,0 +1,46 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require_relative "lib/n64"
+
+patch_dir = ARGV.shift
+rom_dir = ARGV.shift
+
+patch_pattern = format("*.{%s}", N64::PATCH_EXTENSIONS.join(","))
+patch_files = Dir[File.join(patch_dir, patch_pattern)].to_a
+
+rom_pattern = format("*.{%s}", N64::ROM_EXTENSIONS.join(","))
+rom_files = Dir[File.join(rom_dir, rom_pattern)].to_a
+
+rom_info = rom_files.map do |path|
+  N64::RomInfo.new(path).to_h
+end
+
+patch_pairings = patch_files.to_h do |path|
+  bare_name = File.basename(path, ".*")
+
+  [bare_name, rom_info.find { |info| info[:crc1] == bare_name }]
+end
+
+unused, used = patch_pairings.partition { |_n, v| v.nil? }
+unused = unused.map(&:first)
+used = used.to_h
+
+if unused.any?
+  warn("Patches without a ROM: #{unused}")
+end
+
+if used.any?
+  puts "\nPatches in use:"
+  puts used.map { |name, info| format("%s %s", name, info[:file_name]) }.sort.join("\n")
+end
+
+unpatched_roms = rom_info.reject { |info| patch_pairings.key?(info[:crc1]) }
+if unpatched_roms.any?
+  puts "\nUnpatched ROMs:"
+
+  wants = unpatched_roms.sort_by { |info| info[:file_name] }.map do |info|
+    format("%s.ips wanted for %s", info[:crc1], info[:file_name])
+  end
+  puts wants.join("\n")
+end
